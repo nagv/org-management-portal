@@ -7,8 +7,23 @@ const router = new express.Router()
 
 // API to get all the employees
 router.get('/employees', async (req, res) => {
+    // Prepare the filter criteria based on query param
+    const filter = {}
+    if(req.query.country)
+    filter.country = req.query.country
+    if(req.query.city)
+    filter.city = req.query.city
+    if(req.query.state)
+    filter.state = req.query.state
+    if(req.query.firstName)
+    filter.firstName = req.query.firstName
+    if(req.query.lastName)
+    filter.lastName= req.query.lastName
+    if(req.query.phoneNumber)
+    filter.phoneNumber= req.query.phoneNumber
+    
     try {
-        const employees = await Employee.find({})
+        const employees = await Employee.find(filter).limit(parseInt(req.query.limit)).skip(parseInt(req.query.skip))
         res.status(201).send(employees)
     } catch (error) {
         res.status(500).send(error)
@@ -32,18 +47,32 @@ router.get('/employees/:id', async (req, res) => {
     }
 })
 
+// API to create new Employee Record
+router.post('/employees', async (req, res) => {
+
+    const employee = new Employee(req.body)
+
+    try {
+        await employee.save()
+        res.status(201).send(employee)
+
+    } catch (error) {
+        res.status(400).send(error)
+    }
+
+})
 // API to update the employee by ID
 router.patch('/employees/:id', async (req, res) => {
 
     const updates = Object.keys(req.body)
-    const allowedUpdateFields = ['firstName', 'lastName', 'phoneNumber', 'city', 'state', 'hireDate', 'employmentEndDate']
+    const allowedUpdateFields = ['firstName', 'lastName', 'phoneNumber', 'city', 'state', 'country','hireDate', 'employmentEndDate']
 
     const isAllowedUpdate = updates.every((update) => {
         return allowedUpdateFields.includes(update)
     })
 
     if (!isAllowedUpdate) {
-        res.status(400).send('Invalid field provided for update')
+        return res.status(400).send('Invalid field provided for update')
     }
 
     try {
@@ -78,19 +107,6 @@ router.delete('/employees/:id', async (req, res) => {
     }
 })
 
-// API to create new Employee Record
-router.post('/employees', async (req, res) => {
 
-    const employee = new Employee(req.body)
-
-    try {
-        await employee.save()
-        res.status(201).send(employee)
-
-    } catch (error) {
-        res.status(400).send(error)
-    }
-
-})
 
 module.exports = router

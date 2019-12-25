@@ -2,11 +2,10 @@ const mongoose = require('mongoose')
 const validator = require('validator')
 const { check, validationResult } = require('express-validator');
 
-
-const Employee = mongoose.model('employee',{
+const employeeSchema = new mongoose.Schema({
     firstName: {
         type:String,
-        require:true,
+        required:true,
         trim:true,
         validate(value){
             if(validator.isEmpty(value,{ignore_whitespace:true})){
@@ -27,14 +26,11 @@ const Employee = mongoose.model('employee',{
     phoneNumber:{
         type:String,
         required:true,
+        unique:true,
         trim:true,
         validate(value){
-            /**if(!validator.isMobilePhone(value)){
-                throw new Error('Please provide valid US Phone number')
-            }*/
-
-            if(!check(value).isMobilePhone()){
-                throw new Error('Please provide valid US Phone number..')
+            if(!validator.isMobilePhone(value)){
+                throw new Error('Please provide valid US Phone number...')
             }
         }
     },
@@ -48,6 +44,11 @@ const Employee = mongoose.model('employee',{
         required:true,
         trim:true
     },
+    country:{
+        type:String,
+        required:true,
+        trim:true
+    },
     hireDate:{
         type:Date,
         default:Date.now
@@ -55,6 +56,18 @@ const Employee = mongoose.model('employee',{
     employmentEndDate:{
         type:Date
     }
+},{
+    timestamps:true
 })
+
+employeeSchema.methods.toJSON = function(){
+    const employee = this
+    const employeeObj = employee.toObject()
+    delete employeeObj.__v
+    delete employeeObj.createdAt
+    delete employeeObj.updatedAt
+    return employeeObj
+}
+const Employee = mongoose.model('employee',employeeSchema)
 
 module.exports = Employee
