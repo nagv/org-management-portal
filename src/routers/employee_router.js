@@ -1,6 +1,8 @@
 const express = require('express')
 const Employee = require('./../models/employee')
 const mongoose = require('mongoose')
+const logger = require('../util/logger')
+const HttpStatus = require('http-status-codes')
 require('./../db/mongoose')
 
 const router = new express.Router()
@@ -22,11 +24,12 @@ router.get('/employees', async (req, res) => {
     if(req.query.phoneNumber)
     filter.phoneNumber= req.query.phoneNumber
     
+    logger.info('Filter criteria passed for employee query:',filter)
     try {
         const employees = await Employee.find(filter).limit(parseInt(req.query.limit)).skip(parseInt(req.query.skip))
-        res.status(201).send(employees)
+        res.status(HttpStatus.OK).send(employees)
     } catch (error) {
-        res.status(500).send(error)
+        res.status(HttpStatus.INTERNAL_SERVER_ERROR).send(error)
     }
 })
 
@@ -39,11 +42,12 @@ router.get('/employees/:id', async (req, res) => {
     const employee = await Employee.findById(_id)
     try {
         if (!employee) {
-            return res.status(404).send('No Employee record found')
+            logger.info('No Employee record found for input id:',_id)
+            return res.status(HttpStatus.NOT_FOUND).send('No Employee record found')
         }
-        res.status(201).send(employee)
+        res.status(HttpStatus.OK).send(employee)
     } catch (e) {
-        res.status(500).send(error)
+        res.status(HttpStatus.INTERNAL_SERVER_ERROR).send(error)
     }
 })
 
@@ -54,10 +58,10 @@ router.post('/employees', async (req, res) => {
 
     try {
         await employee.save()
-        res.status(201).send(employee)
+        res.status(HttpStatus.OK).send(employee)
 
     } catch (error) {
-        res.status(400).send(error)
+        res.status(HttpStatus.BAD_REQUEST).send(error)
     }
 
 })
@@ -72,20 +76,20 @@ router.patch('/employees/:id', async (req, res) => {
     })
 
     if (!isAllowedUpdate) {
-        return res.status(400).send('Invalid field provided for update')
+        return res.status(HttpStatus.BAD_REQUEST).send('Invalid field provided for update')
     }
 
     try {
         const employee = await Employee.findByIdAndUpdate(req.params.id, req.body, { new: true, runValidators: true })
         if (!employee) {
-            return res.status(404).send('No Employee found for update')
+            return res.status(HttpStatus.NOT_FOUND).send('No Employee found for update')
         }
 
-        res.status(201).send(employee)
+        res.status(HttpStatus.OK).send(employee)
 
     } catch (error) {
 
-        res.status(400).send(error)
+        res.status(HttpStatus.INTERNAL_SERVER_ERROR).send(error)
     }
 
 
@@ -97,13 +101,13 @@ router.delete('/employees/:id', async (req, res) => {
     try {
         const employee = await Employee.findByIdAndDelete(req.params.id)
         if (!employee) {
-            return res.status(404).send('No Employee found')
+            return res.status(HttpStatus.NOT_FOUND).send('No Employee found')
         }
 
-        res.status(201).send(employee)
+        res.status(HttpStatus.OK).send(employee)
 
     } catch (error) {
-        res.status(400).send(error)
+        res.status(HttpStatus.INTERNAL_SERVER_ERROR).send(error)
     }
 })
 

@@ -1,6 +1,7 @@
 const request = require('supertest')
 const app = require('../src/app')
 const Employee = require('../src/models/employee')
+const HttpStatus = require('http-status-codes')
 
 beforeEach(async () => {
     await Employee.deleteMany()
@@ -15,7 +16,7 @@ test('Validate Mandatory field first name for Employee creation', async () => {
         "state": "WC",
         "country": "USA"
 
-    }).expect(400)
+    }).expect(HttpStatus.BAD_REQUEST)
 
 })
 
@@ -27,7 +28,7 @@ test('Validate Mandatory field last name for Employee creation', async () => {
         "state": "WC",
         "country": "USA"
 
-    }).expect(400)
+    }).expect(HttpStatus.BAD_REQUEST)
 
 })
 
@@ -39,7 +40,7 @@ test('Validate Mandatory field phone number for Employee creation', async () => 
         "state": "WC",
         "country": "USA"
 
-    }).expect(400)
+    }).expect(HttpStatus.BAD_REQUEST)
 
 })
 
@@ -52,7 +53,7 @@ test('Validate Mandatory field state for Employee creation', async () => {
         "phoneNumber": '123-123-1234',
         "country": "USA"
 
-    }).expect(400)
+    }).expect(HttpStatus.BAD_REQUEST)
 
 })
 
@@ -64,7 +65,7 @@ test('Validate Mandatory field country for Employee creation', async () => {
         "phoneNumber": '123-123-1234',
         "state": 'CA'
 
-    }).expect(400)
+    }).expect(HttpStatus.BAD_REQUEST)
 
 })
 
@@ -77,7 +78,7 @@ test('Validate field Names for employee creation', async () => {
         "state": "WC",
         "country": "USA"
 
-    }).expect(400)
+    }).expect(HttpStatus.BAD_REQUEST)
 
 
 })
@@ -92,7 +93,7 @@ test('Validate data type(lastname) validation for employee creation', async () =
         "state": "WC",
         "country": "USA"
 
-    }).expect(400)
+    }).expect(HttpStatus.BAD_REQUEST)
 
 
 })
@@ -107,7 +108,7 @@ test('Validate data type(firstName) validation for employee creation', async () 
         "state": "WC",
         "country": "USA"
 
-    }).expect(400)
+    }).expect(HttpStatus.BAD_REQUEST)
 
 
 })
@@ -121,7 +122,7 @@ test('Validate data type(phone number) validation for employee creation', async 
         "state": "WC",
         "country": "USA"
 
-    }).expect(400)
+    }).expect(HttpStatus.BAD_REQUEST)
 
 
 })
@@ -135,7 +136,7 @@ test('Validate data type(city) validation for employee creation', async () => {
         "state": "WC",
         "country": "USA"
 
-    }).expect(400)
+    }).expect(HttpStatus.BAD_REQUEST)
 
 })
 
@@ -148,7 +149,7 @@ test('Validate data type(state) validation for employee creation', async () => {
         "state": 1,
         "country": "USA"
 
-    }).expect(400)
+    }).expect(HttpStatus.BAD_REQUEST)
 
 
 })
@@ -162,7 +163,7 @@ test('Validate data type(country) validation for employee creation', async () =>
         "state": "CA",
         "country": 1
 
-    }).expect(400)
+    }).expect(HttpStatus.BAD_REQUEST)
 
 
 })
@@ -177,7 +178,7 @@ test('Validate empty last name for employee creation', async () => {
         "state": "CA",
         "country": "USA"
 
-    }).expect(400)
+    }).expect(HttpStatus.BAD_REQUEST)
 
 
 })
@@ -191,7 +192,7 @@ test('Validate empty first name for employee creation', async () => {
         "state": "CA",
         "country": "USA"
 
-    }).expect(400)
+    }).expect(HttpStatus.BAD_REQUEST)
 
 
 })
@@ -206,7 +207,7 @@ test('Validate valid phone number for employee creation', async () => {
         "state": "CA",
         "country": "USA"
 
-    }).expect(400)
+    }).expect(HttpStatus.BAD_REQUEST)
 
 })
 
@@ -220,7 +221,7 @@ test('Validate Uniqueness of phone number part of creation', async () => {
         "state": "WC",
         "country": "USA"
 
-    }).expect(201)
+    }).expect(HttpStatus.OK)
 
     const emp2 = await request(app).post('/employees').send({
         "firstName": "Nagaraju",
@@ -230,7 +231,7 @@ test('Validate Uniqueness of phone number part of creation', async () => {
         "state": "WC",
         "country": "USA"
 
-    }).expect(400)
+    }).expect(HttpStatus.BAD_REQUEST)
 
 })
 
@@ -243,7 +244,7 @@ test('Validate fields in Employee after creation', async () => {
         "state": "WC",
         "country": "USA"
 
-    }).expect(201)
+    }).expect(HttpStatus.OK)
 
     // Make sure all the fields populated
     expect(response.body).toMatchObject({
@@ -268,7 +269,7 @@ test('Validate trim feature after Employee creation', async () => {
         "state": " MO",
         "country": "USA "
 
-    }).expect(201)
+    }).expect(HttpStatus.OK)
 
     // Make sure all the fields populated
     expect(response.body).toMatchObject({
@@ -293,7 +294,7 @@ test('Validate fields in Employee after creation', async () => {
         "state": "WC",
         "country": "USA"
 
-    }).expect(201)
+    }).expect(HttpStatus.OK)
 
     // Make sure all the fields populated
     expect(response.body).toMatchObject({
@@ -318,7 +319,7 @@ test('Validate Get all employess', async () => {
         "state": "WC",
         "country": "USA"
 
-    }).expect(201)
+    }).expect(HttpStatus.OK)
 
     const emp2 = await request(app).post('/employees').send({
         "firstName": "Jostna",
@@ -328,9 +329,9 @@ test('Validate Get all employess', async () => {
         "state": "WC",
         "country": "USA"
 
-    }).expect(201)
+    }).expect(HttpStatus.OK)
 
-    const employees = await request(app).get('/employees').send().expect(201)
+    const employees = await request(app).get('/employees').send().expect(HttpStatus.OK)
 
     expect(employees).not.toBeNull()
 
@@ -348,7 +349,7 @@ test('Validate Get all employess with firstName filter', async () => {
         "state": "WC",
         "country": "USA"
 
-    }).expect(201)
+    }).expect(HttpStatus.OK)
 
     const emp2 = await request(app).post('/employees').send({
         "firstName": "FirstN",
@@ -358,9 +359,9 @@ test('Validate Get all employess with firstName filter', async () => {
         "state": "WC",
         "country": "USA"
 
-    }).expect(201)
+    }).expect(HttpStatus.OK)
 
-    const employees = await request(app).get('/employees?firstName=FN').send().expect(201)
+    const employees = await request(app).get('/employees?firstName=FN').send().expect(HttpStatus.OK)
 
     expect(employees).not.toBeNull()
 
@@ -378,7 +379,7 @@ test('Validate Get all employess with lastName filter', async () => {
         "state": "WC",
         "country": "USA"
 
-    }).expect(201)
+    }).expect(HttpStatus.OK)
 
     const emp2 = await request(app).post('/employees').send({
         "firstName": "FN",
@@ -388,9 +389,9 @@ test('Validate Get all employess with lastName filter', async () => {
         "state": "WC",
         "country": "USA"
 
-    }).expect(201)
+    }).expect(HttpStatus.OK)
 
-    const employees = await request(app).get('/employees?lastName=V').send().expect(201)
+    const employees = await request(app).get('/employees?lastName=V').send().expect(HttpStatus.OK)
 
     expect(employees).not.toBeNull()
 
@@ -408,7 +409,7 @@ test('Validate Get all employess with phoneNumber filter', async () => {
         "state": "WC",
         "country": "USA"
 
-    }).expect(201)
+    }).expect(HttpStatus.OK)
 
     const emp2 = await request(app).post('/employees').send({
         "firstName": "FN",
@@ -418,9 +419,9 @@ test('Validate Get all employess with phoneNumber filter', async () => {
         "state": "WC",
         "country": "USA"
 
-    }).expect(201)
+    }).expect(HttpStatus.OK)
 
-    const employees = await request(app).get('/employees?phoneNumber=732-456-5273').send().expect(201)
+    const employees = await request(app).get('/employees?phoneNumber=732-456-5273').send().expect(HttpStatus.OK)
 
     expect(employees).not.toBeNull()
 
@@ -438,7 +439,7 @@ test('Validate Get all employess with city filter', async () => {
         "state": "WC",
         "country": "USA"
 
-    }).expect(201)
+    }).expect(HttpStatus.OK)
 
     const emp2 = await request(app).post('/employees').send({
         "firstName": "FN",
@@ -448,9 +449,9 @@ test('Validate Get all employess with city filter', async () => {
         "state": "NJ",
         "country": "USA"
 
-    }).expect(201)
+    }).expect(HttpStatus.OK)
 
-    const employees = await request(app).get('/employees?city=Morganville').send().expect(201)
+    const employees = await request(app).get('/employees?city=Morganville').send().expect(HttpStatus.OK)
 
     expect(employees).not.toBeNull()
 
@@ -468,7 +469,7 @@ test('Validate Get all employess with state filter', async () => {
         "state": "WC",
         "country": "USA"
 
-    }).expect(201)
+    }).expect(HttpStatus.OK)
 
     const emp2 = await request(app).post('/employees').send({
         "firstName": "FN",
@@ -478,9 +479,9 @@ test('Validate Get all employess with state filter', async () => {
         "state": "NJ",
         "country": "USA"
 
-    }).expect(201)
+    }).expect(HttpStatus.OK)
 
-    const employees = await request(app).get('/employees?state=NJ').send().expect(201)
+    const employees = await request(app).get('/employees?state=NJ').send().expect(HttpStatus.OK)
 
     expect(employees).not.toBeNull()
 
@@ -498,7 +499,7 @@ test('Validate Get all employess with country filter', async () => {
         "state": "WC",
         "country": "USA"
 
-    }).expect(201)
+    }).expect(HttpStatus.OK)
 
     const emp2 = await request(app).post('/employees').send({
         "firstName": "FN",
@@ -508,9 +509,9 @@ test('Validate Get all employess with country filter', async () => {
         "state": "NJ",
         "country": "USA"
 
-    }).expect(201)
+    }).expect(HttpStatus.OK)
 
-    const employees = await request(app).get('/employees?country=IN').send().expect(201)
+    const employees = await request(app).get('/employees?country=IN').send().expect(HttpStatus.OK)
 
     expect(employees).not.toBeNull()
 
@@ -527,7 +528,7 @@ test('Validate Get all employess with limit filter', async () => {
         "state": "WC",
         "country": "USA"
 
-    }).expect(201)
+    }).expect(HttpStatus.OK)
 
     const emp2 = await request(app).post('/employees').send({
         "firstName": "FN",
@@ -537,9 +538,9 @@ test('Validate Get all employess with limit filter', async () => {
         "state": "NJ",
         "country": "USA"
 
-    }).expect(201)
+    }).expect(HttpStatus.OK)
 
-    const employees = await request(app).get('/employees?limit=1').send().expect(201)
+    const employees = await request(app).get('/employees?limit=1').send().expect(HttpStatus.OK)
 
     expect(employees).not.toBeNull()
 
@@ -557,7 +558,7 @@ test('Validate Get all employess with skip filter', async () => {
         "state": "WC",
         "country": "USA"
 
-    }).expect(201)
+    }).expect(HttpStatus.OK)
 
     const emp2 = await request(app).post('/employees').send({
         "firstName": "FN",
@@ -567,7 +568,7 @@ test('Validate Get all employess with skip filter', async () => {
         "state": "NJ",
         "country": "USA"
 
-    }).expect(201)
+    }).expect(HttpStatus.OK)
 
     const emp3 = await request(app).post('/employees').send({
         "firstName": "FN",
@@ -577,9 +578,9 @@ test('Validate Get all employess with skip filter', async () => {
         "state": "NJ",
         "country": "USA"
 
-    }).expect(201)
+    }).expect(HttpStatus.OK)
 
-    const employees = await request(app).get('/employees?skip=1').send().expect(201)
+    const employees = await request(app).get('/employees?skip=1').send().expect(HttpStatus.OK)
 
     expect(employees).not.toBeNull()
 
@@ -597,7 +598,7 @@ test('Validate Get all employess with skip and limit filter', async () => {
         "state": "WC",
         "country": "USA"
 
-    }).expect(201)
+    }).expect(HttpStatus.OK)
 
     const emp2 = await request(app).post('/employees').send({
         "firstName": "FN",
@@ -607,7 +608,7 @@ test('Validate Get all employess with skip and limit filter', async () => {
         "state": "NJ",
         "country": "USA"
 
-    }).expect(201)
+    }).expect(HttpStatus.OK)
 
     const emp3 = await request(app).post('/employees').send({
         "firstName": "FN",
@@ -617,9 +618,9 @@ test('Validate Get all employess with skip and limit filter', async () => {
         "state": "NJ",
         "country": "USA"
 
-    }).expect(201)
+    }).expect(HttpStatus.OK)
 
-    const employees = await request(app).get('/employees?limit=1&skip=1').send().expect(201)
+    const employees = await request(app).get('/employees?limit=1&skip=1').send().expect(HttpStatus.OK)
 
     expect(employees).not.toBeNull()
 
@@ -636,7 +637,7 @@ test('Validate Get all employess', async () => {
         "state": "WC",
         "country": "USA"
 
-    }).expect(201)
+    }).expect(HttpStatus.OK)
 
     const emp2 = await request(app).post('/employees').send({
         "firstName": "Jostna",
@@ -646,9 +647,9 @@ test('Validate Get all employess', async () => {
         "state": "WC",
         "country": "USA"
 
-    }).expect(201)
+    }).expect(HttpStatus.OK)
 
-    const employees = await request(app).get('/employees').send().expect(201)
+    const employees = await request(app).get('/employees').send().expect(HttpStatus.OK)
 
     expect(employees).not.toBeNull()
 
@@ -666,7 +667,7 @@ test('Validate Get Employee by Id', async () => {
         "state": "WC",
         "country": "USA"
 
-    }).expect(201)
+    }).expect(HttpStatus.OK)
 
     const employee = await Employee.findById(response.body._id)
     expect(employee).not.toBeNull()
@@ -683,7 +684,7 @@ test('Validate Update Employee wrong field name', async () => {
         "state": "WC",
         "country": "USA"
 
-    }).expect(201)
+    }).expect(HttpStatus.OK)
 
     const empId = response._id
     await request(app).patch('/employees/'.concat(empId)).send({
@@ -694,7 +695,7 @@ test('Validate Update Employee wrong field name', async () => {
         "state": "WC",
         "country": "USA"
 
-    }).expect(400)
+    }).expect(HttpStatus.BAD_REQUEST)
 
 })
 
@@ -707,7 +708,7 @@ test('Validate Update Employee extra field', async () => {
         "state": "WC",
         "country": "USA"
 
-    }).expect(201)
+    }).expect(HttpStatus.OK)
 
     const empId = response._id
     await request(app).patch('/employees/'.concat(empId)).send({
@@ -719,7 +720,7 @@ test('Validate Update Employee extra field', async () => {
         "state": "WC",
         "country": "USA"
 
-    }).expect(400)
+    }).expect(HttpStatus.BAD_REQUEST)
 
 })
 
@@ -733,14 +734,14 @@ test('Validate Update Employee first name', async () => {
         "state": "WC",
         "country": "USA"
 
-    }).expect(201)
+    }).expect(HttpStatus.OK)
 
 
     const empId = response.body._id
     await request(app).patch('/employees/'.concat(empId)).send({
         "firstName": "Krishna Kumar"
 
-    }).expect(201)
+    }).expect(HttpStatus.OK)
 
     const employee = await Employee.findById(response.body._id)
     expect(employee.firstName).toEqual('Krishna Kumar')
@@ -756,14 +757,14 @@ test('Validate Update Employee last name', async () => {
         "state": "WC",
         "country": "USA"
 
-    }).expect(201)
+    }).expect(HttpStatus.OK)
 
 
     const empId = response.body._id
     await request(app).patch('/employees/'.concat(empId)).send({
         "lastName": "M"
 
-    }).expect(201)
+    }).expect(HttpStatus.OK)
 
     const employee = await Employee.findById(response.body._id)
     expect(employee.lastName).toEqual('M')
@@ -779,14 +780,14 @@ test('Validate Update Employee Phone number', async () => {
         "state": "WC",
         "country": "USA"
 
-    }).expect(201)
+    }).expect(HttpStatus.OK)
 
 
     const empId = response.body._id
     await request(app).patch('/employees/'.concat(empId)).send({
         "phoneNumber": "732-423-1236"
 
-    }).expect(201)
+    }).expect(HttpStatus.OK)
 
     const employee = await Employee.findById(response.body._id)
     expect(employee.phoneNumber).toEqual('732-423-1236')
@@ -803,14 +804,14 @@ test('Validate Update Employee City', async () => {
         "state": "WC",
         "country": "USA"
 
-    }).expect(201)
+    }).expect(HttpStatus.OK)
 
 
     const empId = response.body._id
     await request(app).patch('/employees/'.concat(empId)).send({
         "city": "Fremont"
 
-    }).expect(201)
+    }).expect(HttpStatus.OK)
 
     const employee = await Employee.findById(response.body._id)
     expect(employee.city).toEqual('Fremont')
@@ -826,14 +827,14 @@ test('Validate Update Employee State', async () => {
         "state": "WC",
         "country": "USA"
 
-    }).expect(201)
+    }).expect(HttpStatus.OK)
 
 
     const empId = response.body._id
     await request(app).patch('/employees/'.concat(empId)).send({
         "state": "CA"
 
-    }).expect(201)
+    }).expect(HttpStatus.OK)
 
     const employee = await Employee.findById(response.body._id)
     expect(employee.state).toEqual('CA')
@@ -849,14 +850,14 @@ test('Validate Update Employee country', async () => {
         "state": "WC",
         "country": "USA"
 
-    }).expect(201)
+    }).expect(HttpStatus.OK)
 
 
     const empId = response.body._id
     await request(app).patch('/employees/'.concat(empId)).send({
         "country": "IN"
 
-    }).expect(201)
+    }).expect(HttpStatus.OK)
 
     const employee = await Employee.findById(response.body._id)
     expect(employee.country).toEqual('IN')
@@ -872,7 +873,7 @@ test('Validate Update Employee More than one field', async () => {
         "state": "WC",
         "country": "USA"
 
-    }).expect(201)
+    }).expect(HttpStatus.OK)
 
 
     const empId = response.body._id
@@ -884,7 +885,7 @@ test('Validate Update Employee More than one field', async () => {
         "state": "CA",
         "country": "US"
 
-    }).expect(201)
+    }).expect(HttpStatus.OK)
 
     const employee = await Employee.findById(response.body._id)
     expect(employee.city).toEqual('Fremont')
@@ -906,12 +907,12 @@ test('Validate Delete Employee by wrong Id', async () => {
         "state": "WC",
         "country": "USA"
 
-    }).expect(201)
+    }).expect(HttpStatus.OK)
 
     const employee = await Employee.findById(response.body._id)
     expect(employee).not.toBeNull()
 
-    await request(app).delete('/employees/'.concat(response.body._id).concat('2')).send().expect(400)
+    await request(app).delete('/employees/'.concat(response.body._id).concat('2')).send().expect(HttpStatus.INTERNAL_SERVER_ERROR)
    
 
 })
@@ -925,12 +926,12 @@ test('Validate Delete Employee by Id', async () => {
         "state": "WC",
         "country": "USA"
 
-    }).expect(201)
+    }).expect(HttpStatus.OK)
 
     const employee = await Employee.findById(response.body._id)
     expect(employee).not.toBeNull()
 
-    await request(app).delete('/employees/'.concat(response.body._id)).send().expect(201)
+    await request(app).delete('/employees/'.concat(response.body._id)).send().expect(HttpStatus.OK)
     const employeePostDelete = await Employee.findById(response.body._id)
     expect(employeePostDelete).toBeNull()
 
