@@ -1,19 +1,5 @@
-const dotenv = require('dotenv');
-const result = dotenv.config();
-if (result.error) {
-  throw result.error;
+const DB_CLOUD_URL = 'mongodb+srv://raj_vorugan:Hariom143@orgcluster-0wpoe.gcp.mongodb.net/company?retryWrites=true&w=majority'
+module.exports = {
+    DB_CONNECTION_URL: process.env.DB_CONNECTION_URL || DB_CLOUD_URL,
+    PORT : process.env.PORT || 3000
 }
-const { parsed: envs } = result;
-
-if(!envs.NODE_ENV) {
-    envs.NODE_ENV = 'development'
-}
-
-if(!process.env.PORT) {
-    PORT = 3000
-}
-
-if(!envs.DB_CONNECTION_URL){
-    envs.DB_CONNECTION_URL = 'mongodb+srv://raj_vorugan:Hariom143@orgcluster-0wpoe.gcp.mongodb.net/company?retryWrites=true&w=majority'
-}
-module.exports = envs;
