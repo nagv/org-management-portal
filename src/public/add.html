@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Employee Management Portal</title>
+
+    <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/3.3.1/css/bootstrap.min.css">
+    <link rel="stylesheet" href="/css/styles.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
+    <script src="/js/empadd.js"></script>
+    <style>
+        body { padding-top:50px; }
+        div.error {color: red}
+    </style>
+</head>
+<body>
+  <h2 class="text-center">Add New Employee</h2>
+        <div class="container jumbotron">
+          <form>
+            <div class="form-row">
+              <div class="form-group col-md-6">
+                <label for="inputFirstName">First Name</label>
+                <input type="text" class="form-control" id="firstName" placeholder="firstName" required>
+              </div>
+              <div class="form-group col-md-6">
+                <label for="inputLastName">Last Name</label>
+                <input type="text" class="form-control" id="lastName" placeholder="lastName">
+              </div>
+            </div>
+            <div class="form-row">
+              <div class="form-group col-md-6">
+                <label for="inputPhoneNumber">Phone Number</label>
+                <input type="text" class="form-control" id="phoneNumber" placeholder="phoneNumber">
+              </div>
+              <div class="form-group col-md-3">
+                <label for="inputHireDate">Hire Date</label>
+                <input type="date" class="form-control" id="hireDate" placeholder="hireDate">
+              </div>
+              <div class="form-group col-md-3">
+                <label for="inputEmployementEndDate">Employement End Date</label>
+                <input type="date" class="form-control" id="employmentEndDate" placeholder="employmentEndDate">
+              </div>
+            </div>
+            <div class="form-row">
+              <div class="form-group col-md-6">
+                <label for="inputCity">City</label>
+                <input type="text" class="form-control" id="city">
+              </div>
+              <div class="form-group col-md-4">
+                <label for="inputState">State</label>
+                <input type="text" class="form-control" id="state">
+              </div>
+              <div class="form-group col-md-2">
+                <label for="inputCountry">Country</label>
+                <input type="text" class="form-control" id="country">
+              </div>
+            </div>
+            <div class="form-row">
+              <div class="form-group col-md-2">
+                <input type="button" value="Add Employee" class="btn btn-primary" onClick="addNewEmployeeRecord()"></input>
+              </div>
+        
+              <div class="form-group col-md-4 error" id="errorMessage">
+        
+              </div>
+        
+            </div>
+        
+          </form>
+        </div>
+
+</body>
+</html>

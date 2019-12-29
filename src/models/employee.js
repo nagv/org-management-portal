@@ -1,5 +1,6 @@
 const mongoose = require('mongoose')
 const validator = require('validator')
+const dateFormat = require('dateformat')
 const { check, validationResult } = require('express-validator');
 
 const employeeSchema = new mongoose.Schema({
@@ -51,7 +52,7 @@ const employeeSchema = new mongoose.Schema({
     },
     hireDate:{
         type:Date,
-        default:Date.now
+        default:dateFormat(new Date(), "isoDate")
     },
     employmentEndDate:{
         type:Date
