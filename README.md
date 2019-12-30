@@ -2,13 +2,6 @@
 Repository for managing Organization Details
 
       Application Functionality and Key Assumptions:
-      
-1.	As per DB schema shared, I have considered "Phone Number" as unique field as we dont have any other suitable fields for uniqueness
-2.	I have considered "HireDate" and "Employment End Date" as optional fields where as HireDate gets auto populated if no user input provided
-3.	I have kept the application simple without any security/other token. Adding these features is not complicated activity 
-4.	I tired to come up with basic UI per the assignment. There is a room for adding some extra validations and alignments 
-5.	Though UI and Services are part of same code base, Node services are completely decoupled from UI logic to facilitate consumption of these services from external applications (I started Angular version of UI which I can finish and share if you would like see that sort of integration)
-  
 
 Node Version:13.1.0 Npm Version: 6.13.4
 
