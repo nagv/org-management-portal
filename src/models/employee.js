@@ -1,7 +1,7 @@
 const mongoose = require('mongoose')
 const validator = require('validator')
 const dateFormat = require('dateformat')
-const { check, validationResult } = require('express-validator');
+//const { check, validationResult } = require('express-validator');
 
 const employeeSchema = new mongoose.Schema({
     firstName: {
@@ -31,7 +31,7 @@ const employeeSchema = new mongoose.Schema({
         trim:true,
         validate(value){
             if(!validator.isMobilePhone(value)){
-                throw new Error('Please provide valid US Phone number...')
+                throw new Error('Please provide valid US Phone number')
             }
         }
     },
@@ -61,6 +61,7 @@ const employeeSchema = new mongoose.Schema({
     timestamps:true
 })
 
+// Exclude fields not required part of service response
 employeeSchema.methods.toJSON = function(){
     const employee = this
     const employeeObj = employee.toObject()

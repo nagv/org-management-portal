@@ -14,18 +14,19 @@ app.use(express.json())
 app.use(employeeRouter)
 
 const publicdir = path.join(__dirname,'../src/public')
-console.log('public dir ',publicdir)
 app.use(express.static(publicdir))
 
-// viewed at http://localhost:3000
+// Route to display all employee data
 app.get('/', function(req, res) {
     res.sendFile(path.join(__dirname + '/public/index.html'));
 });
 
+// Route for edit functionality
 app.get('/edit', function(req, res) {
   res.sendFile(path.join(__dirname + '/public/edit.html'));
 });
 
+// Route for adding new employee record
 app.get('/add', function(req, res) {
   res.sendFile(path.join(__dirname + '/public/add.html'));
 });

@@ -1,10 +1,12 @@
 const express = require('express')
 const Employee = require('./../models/employee')
 const mongoose = require('mongoose')
-const dateFormat = require('dateformat')
 const HttpStatus = require('http-status-codes')
 const logger = require('../util/logger')
+const processError = require('../util/commonutil')
 require('./../db/mongoose')
+var constants = require('./../util/employeeconstants')
+empConstants = constants.constants
 
 const router = new express.Router()
 
@@ -30,15 +32,10 @@ router.get('/employees', async (req, res) => {
         const employees = await Employee.find(filter).limit(parseInt(req.query.limit)).skip(parseInt(req.query.skip))
         res.status(HttpStatus.OK).send(employees)
     } catch (error) {
-        var errorMessage = '';
-        if (error.name == 'ValidationError') {
-            errorMessage = error.message;
-            res.statusText = errorMessage
-        } else {
-            errorMessage = 'Error in fetching employee information'
-            res.statusText = errorMessag
-        }
-        res.status(HttpStatus.INTERNAL_SERVER_ERROR).send(errorMessage)
+        const errorResponse = processError(error,'GET_EMPLOYEES')
+        res.statusMessage = errorResponse.statusMessage
+        res.status(HttpStatus.INTERNAL_SERVER_ERROR).send(errorResponse.errorMessage)
+        
     }
 })
 
@@ -46,19 +43,22 @@ router.get('/employees', async (req, res) => {
 // API to get employee by Id
 router.get('/employees/:id', async (req, res) => {
 
+    try {
+    
     const _id = mongoose.Types.ObjectId(req.params.id)
 
     const employee = await Employee.findById(_id)
-    try {
+    
         if (!employee) {
             logger.info('No Employee record found for input id:',_id)
-            res.statusMessage = 'No Employee record found for given input'
-            return res.status(HttpStatus.NOT_FOUND).send('No Employee record found')
+            res.statusMessage = empConstants.GET_EMP_NO_ENTRY
+            return res.status(HttpStatus.NOT_FOUND).send(empConstants.GET_EMP_NO_ENTRY)
         }
         res.status(HttpStatus.OK).send(employee)
     } catch (e) {
-        res.statusMessage = 'Unable to fetch employee details'
-        res.status(HttpStatus.INTERNAL_SERVER_ERROR).send(error)
+        const errorResponse = processError(e,'GET_EMPLOYEE')
+        res.statusMessage = errorResponse.statusMessage
+        res.status(HttpStatus.INTERNAL_SERVER_ERROR).send(errorResponse.errorMessage)
     }
 })
 
@@ -72,21 +72,9 @@ router.post('/employees', async (req, res) => {
         res.status(HttpStatus.OK).send(employee)
 
     } catch (error) {
-        var errorMessage = '';
-        if (error.name == 'ValidationError') {
-            errorMessage = error.message;
-            res.statusMessage = 'firstName,lastName,phoneNumber,city,state and country are mandatory for Employee creation'
-        } else if (error.name=='MongoError'){
-            if(error.message.indexOf('E11000') !=-1) {
-                errorMessage = error
-                res.statusMessage = 'Please provide unique phone number'
-            }
-        }else {
-            errorMessage = 'Error in creating employee record'
-            res.statusMessage = errorMessage
-        }
-       
-        res.status(HttpStatus.BAD_REQUEST).send(errorMessage)
+        const errorResponse = processError(error,'ADD_EMPLOYEE')
+        res.statusMessage = errorResponse.statusMessage
+        res.status(HttpStatus.BAD_REQUEST).send(errorResponse.errorMessage)
     }
 
 })
@@ -101,36 +89,25 @@ router.patch('/employees/:id', async (req, res) => {
     })
 
     if (!isUpdateAllowed) {
-        res.statusMessage = 'firstName,lastName,phoneNumber,city,state and country are mandatory for Employee update'
-        return res.status(HttpStatus.BAD_REQUEST).send('Invalid field provided for update')
+        res.statusMessage = empConstants.UPDATE_EMP_WRONG_FIELD
+        return res.status(HttpStatus.BAD_REQUEST).send(empConstants.UPDATE_EMP_WRONG_FIELD)
     }
 
     try {
         const employee = await Employee.findByIdAndUpdate(req.params.id, req.body, { new: true, runValidators: true })
         if (!employee) {
-            res.statusMessage = 'No matching employee found'
-            return res.status(HttpStatus.NOT_FOUND).send('No Employee found for update')
+            res.statusMessage = empConstants.GET_EMP_NO_ENTRY
+            return res.status(HttpStatus.NOT_FOUND).send(empConstants.GET_EMP_NO_ENTRY)
         }
 
         res.status(HttpStatus.OK).send(employee)
 
     } catch (error) {
 
-        var errorMessage = '';
-        if (error.name == 'ValidationError') {
-            errorMessage = error.message;
-            res.statusMessage = errorMessage
-        } else if (error.name=='MongoError'){
-            if(error.message.indexOf('E11000') !=-1) {
-                errorMessage = error
-                res.statusMessage = 'Please provide unique phone number'
-            }
-        }else {
-            errorMessage = 'Error in creating employee record'
-            res.statusMessage = errorMessage
-        }
-
-        res.status(HttpStatus.INTERNAL_SERVER_ERROR).send(errorMessage)
+        const errorResponse = processError(error,'UPDATE_EMPLOYEE')
+        res.statusMessage = errorResponse.statusMessage
+        res.status(HttpStatus.INTERNAL_SERVER_ERROR).send(errorResponse.errorMessage)
+        
     }
 
 
@@ -142,15 +119,16 @@ router.delete('/employees/:id', async (req, res) => {
     try {
         const employee = await Employee.findByIdAndDelete(req.params.id)
         if (!employee) {
-            res.statusMessage ='No Employee record found';
-            return res.status(HttpStatus.NOT_FOUND).send('No Employee found')
+            res.statusMessage = empConstants.GET_EMP_NO_ENTRY
+            return res.status(HttpStatus.NOT_FOUND).send( empConstants.GET_EMP_NO_ENTRY)
         }
 
         res.status(HttpStatus.OK).send(employee)
 
     } catch (error) {
-        res.statusMessage ='Error in deleting employee record';
-        res.status(HttpStatus.INTERNAL_SERVER_ERROR).send('Error in deleting employee record')
+        const errorResponse = processError(error,'DELETE_EMPLOYEE')
+        res.statusMessage = errorResponse.statusMessage
+        res.status(HttpStatus.INTERNAL_SERVER_ERROR).send(errorResponse.errorMessage)
     }
 })
 

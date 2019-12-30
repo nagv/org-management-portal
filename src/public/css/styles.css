@@ -5,3 +5,6 @@ div.success {color: green}
     content:"*";
     color:red;
   }
+  .form-group.emp-add-button {
+      text-align : right;
+  }

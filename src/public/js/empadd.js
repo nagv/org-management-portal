@@ -1,4 +1,4 @@
-
+// Function to add new employee record
 function addNewEmployeeRecord() {
   const empData = {
     firstName: document.getElementById('firstName').value,
@@ -11,10 +11,9 @@ function addNewEmployeeRecord() {
   if (document.getElementById('hireDate') && document.getElementById('hireDate').value != '') {
     empData.hireDate = document.getElementById('hireDate').value
   }
-  if (document.getElementById('employmentEndDate' && document.getElementById('employmentEndDate').value != '')) {
+  if (document.getElementById('employmentEndDate') && document.getElementById('employmentEndDate').value != '') {
     empData.employmentEndDate = document.getElementById('employmentEndDate').value
   }
-
   fetch('/employees/', {
     method: 'POST',
     headers: {
@@ -29,7 +28,6 @@ function addNewEmployeeRecord() {
       response.json()
     })
     .then((data) => {
-      console.log('data ',data)
       window.sessionStorage.setItem("operationStatusMessage", "Employee record created successfully");
       window.location.href = "/";
     })

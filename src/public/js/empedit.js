@@ -12,40 +12,32 @@ $(document).ready(function () {
     
 });
 
-function updateEmployeeRecord(){
-    var editPayload = {}
-    editPayload.firstName = "FN"
-
-    console.log('editPayload val',editPayload)
-
-    console.log('editPayload val',JSON.stringify(editPayload))
-}
-
+// function to get all query params from URL
 function getUrlVars() {
-var vars = {};
-var parts = window.location.href.replace(/[?&]+([^=&]+)=([^&]*)/gi, function(m,key,value) {
-    vars[key] = value;
-});
-return vars;
+    var vars = {};
+    var parts = window.location.href.replace(/[?&]+([^=&]+)=([^&]*)/gi, function (m, key, value) {
+        vars[key] = value;
+    });
+    return vars;
 }
 
-
-function populateEmployeeData(data){
-        document.getElementById('firstName').value = data.firstName
-        document.getElementById('lastName').value = data.lastName
-        document.getElementById('city').value = data.city
-        document.getElementById('phoneNumber').value = data.phoneNumber
-        document.getElementById('country').value = data.country
-        document.getElementById('state').value = data.state
-        if(data.hireDate){
-        document.getElementById('hireDate').value = data.hireDate.slice(0,10)
-        }
-        if(data.employmentEndDate){
-        document.getElementById('employmentEndDate').value = data.employmentEndDate.slice(0,10)
-        }
+// Function to update the form details from selected employee record
+function populateEmployeeData(data) {
+    document.getElementById('firstName').value = data.firstName
+    document.getElementById('lastName').value = data.lastName
+    document.getElementById('city').value = data.city
+    document.getElementById('phoneNumber').value = data.phoneNumber
+    document.getElementById('country').value = data.country
+    document.getElementById('state').value = data.state
+    if (data.hireDate) {
+        document.getElementById('hireDate').value = data.hireDate.slice(0, 10)
+    }
+    if (data.employmentEndDate) {
+        document.getElementById('employmentEndDate').value = data.employmentEndDate.slice(0, 10)
+    }
     }
 
-
+// Function to perform/call service to update the employee record
 function editEmployeeData() {
     const empData = {
         firstName: document.getElementById('firstName').value,
@@ -63,7 +55,7 @@ function editEmployeeData() {
     var url = window.location.href;
     var id = getUrlVars()["_id"];
     fetch('/employees/' + id, {
-        method: 'PATCH', 
+        method: 'PATCH',
         headers: {
             'Content-Type': 'application/json',
         },
@@ -71,12 +63,12 @@ function editEmployeeData() {
     })
         .then((response) => {
             if (!response.ok) {
-              throw Error(response.statusText);
+                throw Error(response.statusText);
             }
             response.json()
-          })
+        })
         .then((data) => {
-            window.sessionStorage.setItem("operationStatusMessage","Employee Details updated successfully")
+            window.sessionStorage.setItem("operationStatusMessage", "Employee Details updated successfully")
             window.location.href = "/";
         })
         .catch((error) => {
