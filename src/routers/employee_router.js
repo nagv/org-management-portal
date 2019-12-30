@@ -119,7 +119,7 @@ router.patch('/employees/:id', async (req, res) => {
         var errorMessage = '';
         if (error.name == 'ValidationError') {
             errorMessage = error.message;
-            res.statusMessage = 'firstName,lastName,phoneNumber,city,state and country are mandatory for Employee update'
+            res.statusMessage = errorMessage
         } else if (error.name=='MongoError'){
             if(error.message.indexOf('E11000') !=-1) {
                 errorMessage = error

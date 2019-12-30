@@ -2,12 +2,9 @@ $(document).ready(function () {
 
     var url = window.location.href;
     var id = getUrlVars()["_id"];
-    console.log('id value from query', id);
     fetch('/employees/' + id).then((response) => {
         response.json().then((data) => {
-            if (data.error) {
-                console.log('error in fetching data ', data.error)
-            } else {
+            if (!data.error) {
                 populateEmployeeData(data)
             }
         })
@@ -63,8 +60,6 @@ function editEmployeeData() {
         empData.employmentEndDate = document.getElementById('employmentEndDate').value
     }
 
-    console.log('paylad for update ', empData);
-
     var url = window.location.href;
     var id = getUrlVars()["_id"];
     fetch('/employees/' + id, {
@@ -81,6 +76,7 @@ function editEmployeeData() {
             response.json()
           })
         .then((data) => {
+            window.sessionStorage.setItem("operationStatusMessage","Employee Details updated successfully")
             window.location.href = "/";
         })
         .catch((error) => {

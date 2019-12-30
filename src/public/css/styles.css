@@ -1,2 +1,7 @@
 body { padding-top:50px; }
 div.error {color: red}
+div.success {color: green}
+.form-group.required .control-label:after {
+    content:"*";
+    color:red;
+  }

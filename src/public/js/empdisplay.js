@@ -11,21 +11,15 @@ const messageOne = document.querySelector('#status')
 const messageTwo = document.querySelector('#error')
 
 
-/**function showEmployees() {
-    fetch('/employees').then((response) => {
-        response.json().then((data) => {
-            if (data.error) {
-                console.log('error in fetching data ', data.error)
-            } else {
-                console.log(data)
-            }
-        })
-    })
-}*/
 
 
     $( document ).ready(function() {
-            fetch('/employees').then((response) => {
+        var operationStatusMessage = window.sessionStorage.getItem("operationStatusMessage") 
+        if(operationStatusMessage){           
+            $("#operationStatusMessage").empty();
+            document.getElementById('operationStatusMessage').append(operationStatusMessage);
+        } 
+        fetch('/employees').then((response) => {
                 response.json().then((data) => {
                     if (data.error) {
                         console.log('error in fetching data ', data.error)
@@ -34,6 +28,8 @@ const messageTwo = document.querySelector('#error')
                     }
                 })
             })
+
+            window.sessionStorage.removeItem("operationStatusMessage")
 
     });
 
@@ -62,7 +58,7 @@ const messageTwo = document.querySelector('#error')
                     var deleteButton = document.createElement("input");
                     deleteButton.setAttribute("type", "button");
                     deleteButton.setAttribute("value", "Delete");
-                    deleteButton.setAttribute("onClick", "deleteEmployee('"+id+"')");
+                    deleteButton.setAttribute("onClick", "deleteEmployee('"+id+"','"+data[i].lastName+"')");
                     var row = $('<tr></tr>');
                     row.append($('<td></td>').text(data[i].firstName))
                     row.append($('<td></td>').text(data[i].lastName))
@@ -93,15 +89,18 @@ const messageTwo = document.querySelector('#error')
             }
         }
 
-        function deleteEmployee(employeeId){
+        function deleteEmployee(employeeId,lastName){
 
-                console.log('Employee id passed for delete ', employeeId);
-
+            var confirmation = confirm("Are you sure you want to remove "+lastName+" from System?");
+            if (confirmation != true) {
+              return
+            }
                 fetch(
                     '/employees/' + employeeId,
                     { method: 'DELETE' }
                 )
                     .then(res => {
+                        window.sessionStorage.setItem("operationStatusMessage"," Employee Record Deleted successfully")
                         location.reload()
                     })
                     .catch(err => console.error(err))

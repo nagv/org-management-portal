@@ -1,3 +1,4 @@
+
 function addNewEmployeeRecord() {
   const empData = {
     firstName: document.getElementById('firstName').value,
@@ -28,6 +29,8 @@ function addNewEmployeeRecord() {
       response.json()
     })
     .then((data) => {
+      console.log('data ',data)
+      window.sessionStorage.setItem("operationStatusMessage", "Employee record created successfully");
       window.location.href = "/";
     })
     .catch((error) => {
