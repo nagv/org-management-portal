@@ -42,10 +42,10 @@ a robust set of features for the web and mobile applications
 6. validator : | Validator faciliates the validation of Javascript object properties. Explored other validators. But, phone Number validation doesn't seems working fine in others. So, sticked to this dependecy
 winston,winston-daily-rotate-file: | These modules provides convininet logging mechanisum with log level and file management for logs
 7. http-status-codes : | Provides Constants enumerating the HTTP status codes. Based on the Java Apache HttpStatus API
-8.date-format: | This module is been used to perform data operations (Converting date to ISODate format) part of storing in DB. I am taking off Time component while storing the dates in DB 
+8. date-format: | This module is been used to perform data operations (Converting date to ISODate format) part of storing in DB. I am taking off Time component while storing the dates in DB 
 Dev Dependencies:
-9.jest: | Jest provides complete and ready to set-up JavaScript testing solution. This is been used for unit testing
-supertest: |  Supertest provides a high-level abstraction for testing HTTP, while still allowing you to drop down to the lower-level API provided by superagent 
+9. jest: | Jest provides complete and ready to set-up JavaScript testing solution. This is been used for unit testing
+10. supertest: |  Supertest provides a high-level abstraction for testing HTTP, while still allowing you to drop down to the lower-level API provided by superagent 
 
 
 
