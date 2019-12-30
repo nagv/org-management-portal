@@ -1,20 +1,14 @@
 # org-management
 Repository for managing Organization Details
 
-    Application Functionality and Key Assumptions:
+     Application Functionality and Key Assumptions:
       
-1. This Node JS application has UI integrated along with services. Though UI and Services are part of same code base, 
-   services are completely decoupled from UI logic. UI code will invoke the services internally as such it's external services and process 
-   the response and error messages. This design facilitates seperating UI logic to external application 
-   (I did spent some time on building Angular Application which was half way through. But considering the timelines, 
-   I had stick back to the current version of UI)
-2. As per DB schema shared, I have considered "Phone Number" as unique field as we dont have any other suitable fields for uniqueness
-3. I have considered "HireDate" and "Employmenet End Date" as optional fileds where as HireDate will get auto populated if nothing provided from user
-4.I haven't implemented security for the APIs or UI for this assigment. Adding this feature is not a complicated activity
-5. I have tried to buitify UI and addtional validations. I belive there is a room of improvement in this version though current verison given basic features(Eg: Fields level validation for create,update,Date mask, alignements etc..)
-
+A.	Though UI and Services are part of same code base, Node services are completely decoupled from UI logic to facilitate consumption of these services from external applications (I started Angular version of UI which I can finish and share if you would like see that sort of integration)
+B.	As per DB schema shared, I have considered "Phone Number" as unique field as we dont have any other suitable fields for uniqueness
+C.	. I have considered "HireDate" and "Employment End Date" as optional fields where as HireDate gets auto populated if no user input provided
+D.	I have kept the application simple without any security/other token. Adding these features is not complicated activity 
+E.	I tired to come up with basic UI per the assignment. There is a room for adding some extra validations and alignments 
   
-
 Node Version:13.1.0 Npm Version: 6.13.4
 
 Steps to start Server in Local:
@@ -37,24 +31,19 @@ For testing the application with Local DB below are the steps required
     DB_CONNECTION_URL=mongodb://localhost:27017/<<DB Name>>?retryWrites=true&w=majority
 5. Bring up the dev or test instance as per above instructions 
 
-Packages/Modules Used:
-
-express: |Express is a minimal and flexible Node.js web applicaiton framework the provides
+Packages/Modules Used: 
+express: |Express is a minimal and flexible Node.js web application framework the provides
 a robust set of features for the web and mobile applications
-mongodb: | mongodb provides MongoDB driver and faciliates connectvity from Node application to MongoDB
+mongodb: | mongodb provides MongoDB driver and facilitates connectivity from Node application to MongoDB
 mongoose:| Mongoose is the mongodb Object modeling tool designed to work in asynchornous environment
-cors : | CORS is a node.js package for providing a Connect/Express middleware that can be used to enable CORS with various options.
-         This has been installed with the intention of developing seperate Web application (Angular/React) and consume the Node services
-         As of not, Cors has not been fully utilized for the Demo 
+cors : | CORS is a node.js package for providing a Connect/Express middleware that can be used to enable CORS with various options. This has been installed with the intention of developing separate Web application (Angular/React) and consume the Node services
 dotenv : | Dotenv is a zero-dependency module that loads environment variables from a .env file into process.env
-validator : | Validator faciliates the validation of Javascript object properties. Explored other validators. But, phone Number 
-              validation doesn't seems working fine in others. So, sticked to this dependecy
+validator : | Validator faciliates the validation of Javascript object properties. Explored other validators. But, phone Number validation doesn't seems working fine in others. So, sticked to this dependecy
 winston,winston-daily-rotate-file: | These modules provides convininet logging mechanisum with log level and file management for logs
 http-status-codes : | Provides Constants enumerating the HTTP status codes. Based on the Java Apache HttpStatus API
-date-format: | This module is been used ot perform data operations (Converting date to ISODate format) part of storing in DB. 
-              I am takeing off Time component while storing the dates in DB 
-
-Dev Dependecies:
+date-format: | This module is been used to perform data operations (Converting date to ISODate format) part of storing in DB. I am taking off Time component while storing the dates in DB 
+Dev Dependencies:
 jest: | Jest provides complete and ready to set-up JavaScript testing solution. This is been used for unit testing
 supertest: |  Supertest provides a high-level abstraction for testing HTTP, while still allowing you to drop down to the lower-level API provided by superagent 
+
 
