@@ -24,15 +24,11 @@ const processErrors= (error,operation)=>{
         break;
         case 'ADD_EMPLOYEE':
         case 'UPDATE_EMPLOYEE':{
+            console.log('Emp edit validation ',error.name)
 
             if (error.name == empConstants.VALIDATON_ERROR) {
                 result.errorMessage = error.message;
-                var index = error.message.indexOf(empConstants.EMP_VALIDATION_PREFIX)
-                if(index != -1){
-                    result.statusMessage = error.message;
-                } else {
-                    result.statusMessage = empConstants.ADD_UPDATE_VALIDATION_ERR
-                }
+                result.statusMessage = error.message;
             } else if (error.name==empConstants.MONGO_VALIDATION_PREFIX){
                 if(error.message.indexOf(empConstants.MONGO_VALIDATION_DUP_ERR_CODE) !=-1) {
                     result.errorMessage = empConstants.EMP_VALIDATION_UNIQUE_PHONE
@@ -56,6 +52,28 @@ const processErrors= (error,operation)=>{
     }
 
     return result;
-};
+}
 
-module.exports = processErrors;
+const processQueryParams = (req)=>{
+
+    const filter = {}
+    if(req.query.country)
+    filter.country = req.query.country
+    if(req.query.city)
+    filter.city = req.query.city
+    if(req.query.state)
+    filter.state = req.query.state
+    if(req.query.firstName)
+    filter.firstName = req.query.firstName
+    if(req.query.lastName)
+    filter.lastName= req.query.lastName
+    if(req.query.phoneNumber)
+    filter.phoneNumber= req.query.phoneNumber
+
+    return filter
+}
+
+module.exports = {
+    processErrors:processErrors,
+    processQueryParams: processQueryParams
+}

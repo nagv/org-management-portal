@@ -37,3 +37,7 @@ function addNewEmployeeRecord() {
     });
 
 }
+// function to navigate user to home page
+function goHome(){
+  window.location.href = "/";
+}

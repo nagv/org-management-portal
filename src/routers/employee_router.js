@@ -3,7 +3,7 @@ const Employee = require('./../models/employee')
 const mongoose = require('mongoose')
 const HttpStatus = require('http-status-codes')
 const logger = require('../util/logger')
-const processError = require('../util/commonutil')
+const {processErrors,processQueryParams} = require('../util/commonutil')
 require('./../db/mongoose')
 var constants = require('./../util/employeeconstants')
 empConstants = constants.constants
@@ -12,27 +12,13 @@ const router = new express.Router()
 
 // API to get all the employees
 router.get('/employees', async (req, res) => {
-    // Prepare the filter criteria based on query param
-    const filter = {}
-    if(req.query.country)
-    filter.country = req.query.country
-    if(req.query.city)
-    filter.city = req.query.city
-    if(req.query.state)
-    filter.state = req.query.state
-    if(req.query.firstName)
-    filter.firstName = req.query.firstName
-    if(req.query.lastName)
-    filter.lastName= req.query.lastName
-    if(req.query.phoneNumber)
-    filter.phoneNumber= req.query.phoneNumber
-    
+    const filter = processQueryParams(req)
     logger.info('Filter criteria passed for employee query:',filter)
     try {
         const employees = await Employee.find(filter).limit(parseInt(req.query.limit)).skip(parseInt(req.query.skip))
         res.status(HttpStatus.OK).send(employees)
     } catch (error) {
-        const errorResponse = processError(error,'GET_EMPLOYEES')
+        const errorResponse = processErrors(error,'GET_EMPLOYEES')
         res.statusMessage = errorResponse.statusMessage
         res.status(HttpStatus.INTERNAL_SERVER_ERROR).send(errorResponse.errorMessage)
         
@@ -56,7 +42,7 @@ router.get('/employees/:id', async (req, res) => {
         }
         res.status(HttpStatus.OK).send(employee)
     } catch (e) {
-        const errorResponse = processError(e,'GET_EMPLOYEE')
+        const errorResponse = processErrors(e,'GET_EMPLOYEE')
         res.statusMessage = errorResponse.statusMessage
         res.status(HttpStatus.INTERNAL_SERVER_ERROR).send(errorResponse.errorMessage)
     }
@@ -72,7 +58,7 @@ router.post('/employees', async (req, res) => {
         res.status(HttpStatus.OK).send(employee)
 
     } catch (error) {
-        const errorResponse = processError(error,'ADD_EMPLOYEE')
+        const errorResponse = processErrors(error,'ADD_EMPLOYEE')
         res.statusMessage = errorResponse.statusMessage
         res.status(HttpStatus.BAD_REQUEST).send(errorResponse.errorMessage)
     }
@@ -103,10 +89,9 @@ router.patch('/employees/:id', async (req, res) => {
         res.status(HttpStatus.OK).send(employee)
 
     } catch (error) {
-
-        const errorResponse = processError(error,'UPDATE_EMPLOYEE')
+        const errorResponse = processErrors(error,'UPDATE_EMPLOYEE')
         res.statusMessage = errorResponse.statusMessage
-        res.status(HttpStatus.INTERNAL_SERVER_ERROR).send(errorResponse.errorMessage)
+        res.status(HttpStatus.INTERNAL_SERVER_ERROR).send(errorResponse.statusMessage)
         
     }
 
@@ -126,12 +111,10 @@ router.delete('/employees/:id', async (req, res) => {
         res.status(HttpStatus.OK).send(employee)
 
     } catch (error) {
-        const errorResponse = processError(error,'DELETE_EMPLOYEE')
+        const errorResponse = processErrors(error,'DELETE_EMPLOYEE')
         res.statusMessage = errorResponse.statusMessage
         res.status(HttpStatus.INTERNAL_SERVER_ERROR).send(errorResponse.errorMessage)
     }
 })
-
-
 
 module.exports = router

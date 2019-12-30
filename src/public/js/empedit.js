@@ -77,3 +77,7 @@ function editEmployeeData() {
         });
 
 }
+// functio to navigate user to home page
+function goHome(){
+    window.location.href = "/";
+}

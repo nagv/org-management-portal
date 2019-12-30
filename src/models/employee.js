@@ -1,7 +1,6 @@
 const mongoose = require('mongoose')
 const validator = require('validator')
 const dateFormat = require('dateformat')
-//const { check, validationResult } = require('express-validator');
 
 const employeeSchema = new mongoose.Schema({
     firstName: {

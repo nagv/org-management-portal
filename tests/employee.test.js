@@ -2,6 +2,7 @@ const request = require('supertest')
 const app = require('../src/app')
 const Employee = require('../src/models/employee')
 const HttpStatus = require('http-status-codes')
+require('../src/util/commonutil')
 
 beforeEach(async () => {
     await Employee.deleteMany()
