@@ -3,15 +3,15 @@ Repository for managing Organization Details
 
     Application Functionality and Key Assumptions:
       
-A. This Node JS application has UI integrated along with services. Though UI and Services are part of same code base, 
+1. This Node JS application has UI integrated along with services. Though UI and Services are part of same code base, 
    services are completely decoupled from UI logic. UI code will invoke the services internally as such it's external services and process 
    the response and error messages. This design facilitates seperating UI logic to external application 
    (I did spent some time on building Angular Application which was half way through. But considering the timelines, 
    I had stick back to the current version of UI)
-B. As per DB schema shared, I have considered "Phone Number" as unique field as we dont have any other suitable fields for uniqueness
-C. I have considered "HireDate" and "Employmenet End Date" as optional fileds where as HireDate will get auto populated if nothing provided from user
-D.I haven't implemented security for the APIs or UI for this assigment. Adding this feature is not a complicated activity
-E. I have tried to buitify UI and addtional validations. I belive there is a room of improvement in this version though current verison given basic features(Eg: Fields level validation for create,update,Date mask, alignements etc..)
+2. As per DB schema shared, I have considered "Phone Number" as unique field as we dont have any other suitable fields for uniqueness
+3. I have considered "HireDate" and "Employmenet End Date" as optional fileds where as HireDate will get auto populated if nothing provided from user
+4.I haven't implemented security for the APIs or UI for this assigment. Adding this feature is not a complicated activity
+5. I have tried to buitify UI and addtional validations. I belive there is a room of improvement in this version though current verison given basic features(Eg: Fields level validation for create,update,Date mask, alignements etc..)
 
   
 
