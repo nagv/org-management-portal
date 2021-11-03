@@ -23,7 +23,7 @@
     "jest": "^24.9.0",
     "mongodb": "^3.4.1",
     "mongoose": "^5.8.2",
-    "validator": "^12.1.0",
+    "validator": "^13.7.0",
     "winston": "^3.2.1",
     "winston-daily-rotate-file": "^4.4.0"
   },
